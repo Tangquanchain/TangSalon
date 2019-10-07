@@ -45,7 +45,7 @@
 
             <ul class="nav flex-column">
               <li class="nav-item">
-                <router-link class="nav-link" to="/Customorder">
+                <router-link class="nav-link" to="/custom_order">
                        <i class="fas fa-shopping-cart"></i>
                 模擬訂單
                 </router-link>

@@ -139,7 +139,6 @@
 
 <script>
 import $ from "jquery";
-
 export default {
   data() {
     return {
@@ -156,8 +155,8 @@ export default {
     };
   },
   methods: {
-    getProducts() {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products?page=:page`;
+    getProducts(page) {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products?page=${page}`;
       const vm = this;
       vm.isLoading = true;
       this.$http.get(api).then(response => {
@@ -219,7 +218,7 @@ export default {
       });
     },
     addCouponCode(){
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/coupon}`;
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/coupon`;
       const vm = this;
       vm.isLoading = true;
       const coupon = {

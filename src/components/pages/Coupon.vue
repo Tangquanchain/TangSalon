@@ -151,7 +151,6 @@
 <script>
 import $ from "jquery";
 import Pagination from "../Pagination";
-
 export default {
   data() {
     return {
@@ -164,14 +163,12 @@ export default {
       isLoading: false
     };
   },
-
   components: {
     Pagination
   },
-
   methods: {
     getCoupon(page = 1) {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupons?page=${page}}`;
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupons?page=${page}`;
       const vm = this;
       vm.isLoading = true;
       this.$http.get(api).then(response => {
@@ -189,35 +186,20 @@ export default {
         this.tempProducts = Object.assign({}, items);
         this.isNew = false;
         //調整日期格式
-        const month =
-          new Date(items.due_date * 1000).getMonth() < 10
+        const dt = new Date(items.due_date).toLocaleDateString();
+        console.log(dt )
+        const month = new Date(items.due_date * 1000).getMonth() < 9
             ? "0" + (new Date(items.due_date * 1000).getMonth() + 1)
             : new Date(items.due_date * 1000).getMonth() + 1;
-        const date =
-          new Date(items.dut_date * 1000).getDate() < 10
+        const date = new Date(items.dut_date * 1000).getDate() < 10
             ? "0" + new Date(items.due_date * 1000).getDate()
             : new Date(items.due_date * 1000).getDate();
-        this.tempProducts.due_date = `${new Date(
-          items.due_date * 1000
-        ).getFullYear()}-${month}-${date}`;
+        this.tempProducts.due_date = `${new Date(items.due_date * 1000).getFullYear()}-${month}-${date}`;
+
       }
       $("#ProductModal").modal("show");
     },
-
-    addNewCoupon() {
-      const vm = this;
-      const timestamp = new Date(vm.tempProducts.due_date).getTime(); //Date 內無值的話為當前時間
-      vm.tempProducts.due_date = Math.floor(timestamp / 1000); //改成API所需格式
-      const postCoupon = vm.tempProducts;
-      let api = `${process.env.APIPATH}/api/${process.env.PATHNAME}/admin/coupon`;
-      let httpMethod = "post";
-      this.$http[httpMethod](api, { data: postCoupon }).then(response => {
-        $("#couponModal").modal("hide");
-        this.getCoupon();
-        vm.couponData = {};
-      });
-    },
-
+    
     sendCoupon(id) {
       let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon`;
       // console.log('API伺服器路徑:'+process.env.APIPATH,'申請的APIPath:'+process.env.CUSTOMPATH);
