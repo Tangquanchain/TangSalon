@@ -185,9 +185,8 @@ export default {
       } else {
         this.tempProducts = Object.assign({}, items);
         this.isNew = false;
-        //調整日期格式
-        const dt = new Date(items.due_date).toLocaleDateString();
-        console.log(dt )
+        //調整日期格式 //*1000原因是timestamp取得的是秒數，javaScript中要帶入的是毫秒
+
         const month = new Date(items.due_date * 1000).getMonth() < 9
             ? "0" + (new Date(items.due_date * 1000).getMonth() + 1)
             : new Date(items.due_date * 1000).getMonth() + 1;
@@ -195,7 +194,6 @@ export default {
             ? "0" + new Date(items.due_date * 1000).getDate()
             : new Date(items.due_date * 1000).getDate();
         this.tempProducts.due_date = `${new Date(items.due_date * 1000).getFullYear()}-${month}-${date}`;
-
       }
       $("#ProductModal").modal("show");
     },
@@ -204,8 +202,10 @@ export default {
       let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon`;
       // console.log('API伺服器路徑:'+process.env.APIPATH,'申請的APIPath:'+process.env.CUSTOMPATH);
       const vm = this;
-      const timestamp = new Date(vm.tempProducts.due_date).getTime(); //Date 內無值的話為當前時間
-      vm.tempProducts.due_date = Math.floor(timestamp / 1000); //改成API所需格式
+      // const timestamp = new Date(vm.tempProducts.due_date).getTime();
+      // vm.tempProducts.due_date = Math.floor(timestamp / 1000);
+      const timestamp = new Date(vm.tempProducts.due_date); //Date 內無值的話為當前時間
+      vm.tempProducts.due_date = timestamp.toISOString().replace('T', ' ').substr(0, 10) //ISO格式
       const postCoupon = vm.couponData;
       let httpMethod = "post";
       console.log("判斷是建立新產品或編輯", vm.isNew);
@@ -214,7 +214,7 @@ export default {
         api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon/${vm.tempProducts.id}`;
         httpMethod = "put";
       }
-      this.$http[httpMethod](api, { data: vm.tempProducts }).then(response => {
+      this.$http[httpMethod](api, { data: vm.tempProducts}).then(response => {
         console.log(response.data);
         if (response.data.success) {
           $("#ProductModal").modal("hide");
