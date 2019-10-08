@@ -12,19 +12,36 @@ import 'bootstrap'; //bootstrap 必須仰賴 jQuery 、 popper才能運行
 //import 'jquery'; 如果要全域使用 不過在此會有另外的 ESLint 提示說明（不建議用全域）
 //可以直接在 main.js 下 import $ from 'jquery'，然後也需要在要使用的元件內 import $ from 'jquery' 才能使用喔。
 import currencyFilter from './filters/currency'; //千分號
+import  VeeValidate  from 'vee-validate'; //表單驗證套件
+import zhTW from 'vee-validate/dist/locale/zh_TW';
+import VueI18n from 'vue-i18n';
+Vue.use(VueI18n);
+
+const i18n = new VueI18n({
+  locale: 'zhTW'
+});
+Vue.use(VeeValidate, {
+  events: 'input|blur',
+  i18n,
+  dictionary: {
+    zhTW
+  }
+});
 
 
 Vue.component('Loading',Loading); //啟用全域元件
-
 Vue.use(VueAxios, axios) // 必須要在 Vue 設定的進入點(main.js)內使用，外部插件要使用的話都需要用Vue.use
 Vue.config.productionTip = false;
-
 axios.defaults.withCredentials = true; //每次發送API時，將sectionCookie 存入 Cookie內
-
 Vue.filter('currency', currencyFilter); //註冊在全域的filter
+
+
+
+
 
 /* eslint-disable no-new */
 new Vue({
+  i18n,
   el: '#app',
   components: { App },
   template: '<App/>',

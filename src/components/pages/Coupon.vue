@@ -16,7 +16,7 @@
         <tr v-for="items in coupon_code" :key="items.id">
           <td>{{items.title }}</td>
           <td>{{items.percent}}</td>
-          <td>{{`${new Date(items.due_date*1000).getFullYear()}/${new Date(items.due_date*1000).getMonth()+1}/${new Date(items.due_date*1000).getDate()}`}}</td>
+          <td>{{ items.due_date }}</td>
           <td>
             <span v-if="items.is_enabled==1" class="text-success">啟用</span>
             <!-- 產品如果為啟用 -->
@@ -74,24 +74,19 @@
               />
             </div>
             <div class="form-group">
-                <div class="d-flex">
-                  <label for="message-text" class="col-form-labe font-weight-bold">到期日</label>
-                </div>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="message-text"
-                  v-model="tempProducts.due_date"
-                />
+              <div class="d-flex">
+                <label for="message-text" class="col-form-labe font-weight-bold">到期日</label>
               </div>
+              <input
+                type="date"
+                class="form-control"
+                id="message-text"
+                v-model="tempProducts.due_date"
+              />
+            </div>
             <div class="form-group">
               <label for="percent">折扣百分比</label>
-              <input
-                v-model="tempProducts.percent"
-                type="text"
-                class="form-control"
-                id="percent"
-              />
+              <input v-model="tempProducts.percent" type="text" class="form-control" id="percent" />
             </div>
             <div class="form-group">
               <div class="form-check">
@@ -109,7 +104,11 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-success" @click="sendCoupon( tempProducts.id)">更新優惠卷</button>
+            <button
+              type="button"
+              class="btn btn-success"
+              @click="sendCoupon( tempProducts.id)"
+            >更新優惠卷</button>
           </div>
         </div>
       </div>
@@ -186,26 +185,23 @@ export default {
         this.tempProducts = Object.assign({}, items);
         this.isNew = false;
         //調整日期格式 //*1000原因是timestamp取得的是秒數，javaScript中要帶入的是毫秒
-
-        const month = new Date(items.due_date * 1000).getMonth() < 9
-            ? "0" + (new Date(items.due_date * 1000).getMonth() + 1)
-            : new Date(items.due_date * 1000).getMonth() + 1;
-        const date = new Date(items.dut_date * 1000).getDate() < 10
-            ? "0" + new Date(items.due_date * 1000).getDate()
-            : new Date(items.due_date * 1000).getDate();
-        this.tempProducts.due_date = `${new Date(items.due_date * 1000).getFullYear()}-${month}-${date}`;
+        // const month = new Date(items.due_date * 1000).getMonth() < 9
+        //     ? "0" + (new Date(items.due_date * 1000).getMonth() + 1)
+        //     : new Date(items.due_date * 1000).getMonth() + 1;
+        // const date = new Date(items.dut_date * 1000).getDate() < 10
+        //     ? "0" + new Date(items.due_date * 1000).getDate()
+        //     : new Date(items.due_date * 1000).getDate();
+        // this.tempProducts.due_date = `${new Date(items.due_date * 1000).getFullYear()}-${month}-${date}`;
+        console.log(this.tempProducts.due_date);
       }
       $("#ProductModal").modal("show");
     },
-    
+
     sendCoupon(id) {
       let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon`;
-      // console.log('API伺服器路徑:'+process.env.APIPATH,'申請的APIPath:'+process.env.CUSTOMPATH);
       const vm = this;
-      // const timestamp = new Date(vm.tempProducts.due_date).getTime();
-      // vm.tempProducts.due_date = Math.floor(timestamp / 1000);
-      const timestamp = new Date(vm.tempProducts.due_date); //Date 內無值的話為當前時間
-      vm.tempProducts.due_date = timestamp.toISOString().replace('T', ' ').substr(0, 10) //ISO格式
+      const timestamp = new Date(vm.tempProducts.due_date); //獲取timestamp時間
+      vm.tempProducts.due_date = timestamp.toISOString().replace("T", " ").substr(0, 10); //ISO格式
       const postCoupon = vm.couponData;
       let httpMethod = "post";
       console.log("判斷是建立新產品或編輯", vm.isNew);
@@ -214,7 +210,7 @@ export default {
         api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon/${vm.tempProducts.id}`;
         httpMethod = "put";
       }
-      this.$http[httpMethod](api, { data: vm.tempProducts}).then(response => {
+      this.$http[httpMethod](api, { data: vm.tempProducts }).then(response => {
         console.log(response.data);
         if (response.data.success) {
           $("#ProductModal").modal("hide");
