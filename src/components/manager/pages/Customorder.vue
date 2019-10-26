@@ -71,7 +71,7 @@
               <del class="h6" v-if="product.price">原價{{product.origin_price}}元</del>
               <div class="h4" v-if="product.price">現在只要{{product.price}}元</div>
             </div>
-            <select name class="form-control mt-3" v-model="product.num" id>
+            <select name class="0-control mt-3" v-model="product.num" id>
               <option :value="num" v-for="num in 10" :key="num">選購 {{ num }} {{ product.unit }}</option>
               <!-- {{ product.unit }} 編輯建立產品增加單位選項才會有 unit 屬性 -->
             </select>
@@ -94,10 +94,12 @@
     <div class="container">
       <table class="table mt-4">
         <thead>
-          <th></th>
-          <th>品名</th>
-          <th>數量</th>
-          <th>單價</th>
+          <tr>
+            <th></th>
+            <th>品名</th>
+            <th>數量</th>
+            <th>單價</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="(items) in  carts" :key="items.id">
@@ -290,10 +292,9 @@ export default {
       const vm = this;
       vm.isLoading = true;
       this.$http.get(api).then(response => {
-        console.log(response.data);
-        console.log(response.data.data.total);
         vm.isLoading = false;
         vm.carts = response.data.data.carts;
+        console.log(vm.carts);
         vm.cartTotal = response.data.data.total;
         vm.cartFinal_Total = response.data.data.final_total;
       });
@@ -331,9 +332,12 @@ export default {
           this.$http.post(api, { data: vm.form }).then(response => {
             console.log("訂單已建立", response);
             // vm.isLoading = false;
+            if (response.data.success) {
+              vm.$router.push(`/custom_checkout/${response.data.orderId}`);
+            }
           });
-        }else{
-          console.log('表單錯誤')
+        } else {
+          console.log("表單錯誤");
         }
       });
     }

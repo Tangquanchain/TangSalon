@@ -13,7 +13,7 @@ import 'bootstrap'; //bootstrap 必須仰賴 jQuery 、 popper才能運行
 //可以直接在 main.js 下 import $ from 'jquery'，然後也需要在要使用的元件內 import $ from 'jquery' 才能使用喔。
 import currencyFilter from './filters/currency'; //千分號
 import  VeeValidate  from 'vee-validate'; //表單驗證套件
-import zhTW from 'vee-validate/dist/locale/zh_TW';
+import zhTW from 'vee-validate/dist/locale/zh_TW'; //中文格式
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);
 
@@ -21,7 +21,7 @@ const i18n = new VueI18n({
   locale: 'zhTW'
 });
 Vue.use(VeeValidate, {
-  events: 'input|blur',
+  events: 'input|blur', //觸發離開焦點事件
   i18n,
   dictionary: {
     zhTW

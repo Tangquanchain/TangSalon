@@ -1,4 +1,6 @@
+
 <template>
+<!-- 可刪除該檔案，當參考用 -->
   <div>
     <a href="#" @click.prevent="signout">登出</a>
   </div>

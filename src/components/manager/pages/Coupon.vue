@@ -203,6 +203,8 @@ export default {
       const timestamp = new Date(vm.tempProducts.due_date); //獲取timestamp時間
       // vm.tempProducts.due_date = timestamp.toISOString().replace("T", " ").substr(0, 10); //ISO格式
       vm.tempProducts.due_date = timestamp.toLocaleDateString().replace('/','-').replace('/','-');
+      // console.log(timestamp.toLocaleDateString());
+      // console.log(timestamp.toISOString());
       const postCoupon = vm.couponData;
       let httpMethod = "post";
       console.log("判斷是建立新產品或編輯", vm.isNew);
