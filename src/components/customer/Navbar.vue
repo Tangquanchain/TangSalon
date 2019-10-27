@@ -31,7 +31,7 @@
       </a>
 
       <!-- 手機購物車 -->
-      <div class="dropdown" style="positon:relative">
+      <!-- <div class="dropdown" style="positon:relative">
         <a
           class="cartphone nav-link text-white order-md-1 d-sm-block d-md-none"
           data-toggle="dropdown"
@@ -88,7 +88,7 @@
             <i class="fa fa-cart-plus" aria-hidden="true"></i> 結帳去
           </a>
         </div>
-      </div>
+      </div> -->
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
@@ -238,7 +238,6 @@ export default {
                 console.log(response.data.data);
              vm.cartLength = (response.data.data.carts).length;
              console.log(vm.cartLength);
-               this.$emit("cartreFlash");
            })
     },
 
