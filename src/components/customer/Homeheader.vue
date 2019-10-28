@@ -122,15 +122,18 @@
                 ></div>
                 <div class="product_guide text-dark text-center p-3">
                   <h3 class="mb-2">SELECT STYLE</h3>
-                  <button class="btn btn-size" type="buttom"  @click="addtoCart(items.id)">ADD TO CART</button>
+                  <button
+                    class="btn btn-size"
+                    type="buttom"
+                    @click="addtoCart(items.id)"
+                  >ADD TO CART</button>
                 </div>
                 <div class="newstamp p-2">
                   <span>HOT</span>
                 </div>
               </div>
 
-              <div class="txt text-cente
-               mt-2">
+              <div class="txt text-cente mt-2">
                 <p>{{items.title}}</p>
                 <p>{{items.price | currency}} TW</p>
               </div>
@@ -178,6 +181,14 @@ export default {
       });
     },
 
+    getCartNum(cartNum) {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+      const vm = this;
+      this.$http.get(api).then(response => {
+        console.log(response.data.data.carts.length);
+      });
+    },
+
     addtoCart(id, qty = 1) {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       const vm = this;
@@ -188,10 +199,15 @@ export default {
         qty
       };
       this.$http.post(api, { data: cart }).then(response => {
-        console.log(response);
         vm.isLoading = false;
         vm.status.loadingItem = "";
         vm.getManProducts();
+        if (response.data.success) {
+          vm.$bus.$on("message:push", (cartNum) => {
+            console.log('cartNum',cartNum); //找不到參數cartNum
+            vm.getCartNum(cartNum);
+          });
+        }
       });
     }
   },
