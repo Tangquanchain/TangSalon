@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="wrap">
+      <AlertCart/>
       <Aside/>
       <Navbar/>
       <Homeheader/>
@@ -16,8 +17,10 @@ import Navbar from "./Navbar";
 import Aside from './Aside';
 import Homeheader from './Homeheader';
 import Footer from './Footer';
+import AlertCart from './AlertCartMessage'
 export default {
   components: {
+    AlertCart,
     Navbar,
     Aside,
     Homeheader,

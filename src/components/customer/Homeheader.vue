@@ -10,7 +10,7 @@
                 <a class href="#">
                   <img
                     class="imghw_size1"
-                    style="height:588px; width:350px;"
+                    style="height:581px; width:350px; margin-top:7px;"
                     src="https://images.unsplash.com/photo-1533245270348-821d4d5c7514?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
                     alt
                   />
@@ -96,7 +96,7 @@
 
               <div class="txt text-center mt-2">
                 <p>{{items.title}}</p>
-                <p>{{items.price | currency}}TW</p>
+                <p>{{items.price | currency}} TW</p>
               </div>
             </div>
           </div>
@@ -181,14 +181,6 @@ export default {
       });
     },
 
-    getCartNum(cartNum) {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
-      const vm = this;
-      this.$http.get(api).then(response => {
-        console.log(response.data.data.carts.length);
-      });
-    },
-
     addtoCart(id, qty = 1) {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       const vm = this;
@@ -201,13 +193,11 @@ export default {
       this.$http.post(api, { data: cart }).then(response => {
         vm.isLoading = false;
         vm.status.loadingItem = "";
+        console.log("購物車編號數量",response.data.data); //不像get(api)回傳一[]就可以計算length
         vm.getManProducts();
-        if (response.data.success) {
-          vm.$bus.$on("message:push", (cartNum) => {
-            console.log('cartNum',cartNum); //找不到參數cartNum
-            vm.getCartNum(cartNum);
-          });
-        }
+         if(response.data.success){
+           vm.$bus.$emit("message:push",response.data.data);
+         }
       });
     }
   },

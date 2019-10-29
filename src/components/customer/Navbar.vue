@@ -1,19 +1,7 @@
 <template>
   <div>
     <loading :active.sync="isLoading"></loading>
-    <nav class="navbar navbar-expand-md navbar-light stick-top">
-      <!-- <button
-        class="navbar-toggler d-lg-none text-white"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="navbar-toggler-icon"></i>
-      </button>-->
-
+    <nav class="navbar navbar-expand-md navbar-light">
       <a href="#" class="side_icon d-md-none d-sm-block" @click.prevent="siderOpen">
         <span></span>
         <span></span>
@@ -31,66 +19,73 @@
       </a>
 
       <!-- 手機購物車 -->
-      <!-- <div class="dropdown" style="positon:relative">
+      <div class="dropdown d-md-none" style="positon:relative">
         <a
-          class="cartphone nav-link text-white order-md-1 d-sm-block d-md-none"
+          @click="getCartScreen"
+          class="nav-link text-dark order-md-1"
+          href="#"
           data-toggle="dropdown"
           data-flip="false"
-          href="#"
         >
-          <i class="fa fa-shopping-bag fa-2x align-baseline" aria-hidden="true"></i>
+          <i
+            class="fa fa-shopping-bag align-baseline text-white"
+            aria-hidden="true"
+            style="font-size:26px"
+          ></i>
           <span
             class="badge badge-pill badge-danger"
-            style="position:absolute; left:42px; top:12px; font-size:10px;"
-          >9</span>
+            style="position:absolute; left:25px; top:7px; font-size:10px;"
+          >{{cartLength}}</span>
         </a>
         <div
           class="dropdown-menu dropdown-menu-right p-3"
-          style="min-width: 300px"
+          style="min-width: 450px; height:175px; overflow-y:scroll"
           data-offset="400"
         >
-          <h6>已選擇商品</h6>
+          <h6 class="font-weight-bold">CART LIST</h6>
           <table class="table table-sm">
-            <tbody>
-              <tr>
+            <tbody v-if="cartProduct">
+              <tr v-for="items in cartProduct" :key="items.id">
                 <td class="align-middle text-center">
-                  <a
-                    href="#removeModal"
-                    class="text-muted"
-                    data-toggle="modal"
-                    data-title="刪除 金牌西裝 1 件"
-                  >
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </a>
+                  <div
+                    :style="`width:100px; height:100px; background: url(${items.product.imageUrl}) center / cover no-repeat;`"
+                  ></div>
                 </td>
-                <td class="align-middle">金牌西裝</td>
-                <td class="align-middle">1 件</td>
-                <td class="align-middle text-right">$520</td>
-              </tr>
-              <tr>
-                <td class="align-middle text-center">
-                  <a
-                    href="#removeModal"
-                    class="text-muted"
-                    data-toggle="modal"
-                    data-title="刪除 金牌女裝 1 件"
-                  >
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </a>
+                <td class="align-middle">
+                  <p class="cartProduct_txt mb-0">{{items.product.title}}</p>
                 </td>
-                <td class="align-middle">金牌女裝</td>
-                <td class="align-middle">1 件</td>
-                <td class="align-middle text-right">$480</td>
+                <td class="align-middle">X{{items.qty}}</td>
+                <td class="align-middle text-right">{{items.product.origin_price | currency }} TW</td>
+                <td class="align-middle">
+                  <button class="btn" type="button" @click="removeCart(items.id)">
+                    <i class="fa fa-trash-alt" aria-hidden="true"></i>
+                  </button>
+                </td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                <td class="text-left" colspan="2">
+                  <p class="cartProduct_txt mb-0">TOTAL</p>
+                </td>
+                <td class="text-right" colspan="3">
+                  <p class="cartProduct_txt mb-0">{{ cartTotal | currency }} TW</p>
+                </td>
+              </tr>
+            </tfoot>
           </table>
-          <a href="shoppingCart-checkout.html" class="btn btn-primary btn-block">
-            <i class="fa fa-cart-plus" aria-hidden="true"></i> 結帳去
+          <a
+            href="shoppingCart-checkout.html"
+            class="btn btn-primary btn-block"
+            style="border-radius:20px"
+          >
+            <p class="cartProduct_txt mb-0">CHECKOUT</p>
           </a>
         </div>
-      </div> -->
+        <div class="cart-modal" @click="removeScreen"></div>
+      </div>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse d-none d-md-block" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">Home</a>
@@ -120,7 +115,7 @@
             <!-- 網頁購物車 -->
             <div class="dropdown" style="positon:relative">
               <a
-                @click="getProduct"
+                @click="getCartScreen"
                 class="nav-link text-dark order-md-1 mr-5"
                 href="#"
                 data-toggle="dropdown"
@@ -134,23 +129,29 @@
                 <span
                   class="badge badge-pill badge-danger"
                   style="position:absolute; left:25px; top:7px; font-size:10px;"
-                > {{cartLength}} </span>
+                >{{cartLength}}</span>
               </a>
               <div
-                class="dropdown-menu dropdown-menu-right p-3 h-100vh"
-                style="min-width: 450px"
+                class="dropdown-menu dropdown-menu-right p-3"
+                style="min-width: 450px; height:265px; overflow-y:scroll"
                 data-offset="400"
               >
-                <h6>已選擇商品</h6>
+                <h6 class="font-weight-bold">CART LIST</h6>
                 <table class="table table-sm">
-                  <tbody v-if= "cartProduct">
+                  <tbody v-if="cartProduct">
                     <tr v-for="items in cartProduct" :key="items.id">
                       <td class="align-middle text-center">
-                       <div :style="`width:100px; height:100px; background: url(${items.product.imageUrl}) center / cover no-repeat;`"></div>
+                        <div
+                          :style="`width:100px; height:100px; background: url(${items.product.imageUrl}) center / cover no-repeat;`"
+                        ></div>
                       </td>
-                      <td class="align-middle">{{items.product.title}}</td>
+                      <td class="align-middle">
+                        <p class="cartProduct_txt mb-0">{{items.product.title}}</p>
+                      </td>
                       <td class="align-middle">X{{items.qty}}</td>
-                      <td class="align-middle text-right">{{items.product.origin_price | currency }} TW</td>
+                      <td
+                        class="align-middle text-right"
+                      >{{items.product.origin_price | currency }} TW</td>
                       <td class="align-middle">
                         <button class="btn" type="button" @click="removeCart(items.id)">
                           <i class="fa fa-trash-alt" aria-hidden="true"></i>
@@ -160,14 +161,21 @@
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td class="text-left" colspan="2">TOTAL</td>
-                      <td class="text-right" colspan="3">{{ cartTotal | currency }} TW</td>
-                       
+                      <td class="text-left" colspan="2">
+                        <p class="cartProduct_txt mb-0">TOTAL</p>
+                      </td>
+                      <td class="text-right" colspan="3">
+                        <p class="cartProduct_txt mb-0">{{ cartTotal | currency }} TW</p>
+                      </td>
                     </tr>
                   </tfoot>
                 </table>
-                <a href="shoppingCart-checkout.html" class="btn btn-primary btn-block">
-                  <i class="fa fa-cart-plus" aria-hidden="true"></i> 結帳去
+                <a
+                  href="shoppingCart-checkout.html"
+                  class="btn btn-primary btn-block"
+                  style="border-radius:20px"
+                >
+                  <p class="cartProduct_txt mb-0">CHECKOUT</p>
                 </a>
               </div>
             </div>
@@ -184,6 +192,7 @@
             </a>
           </li>
         </ul>
+        <div class="cart-modal" @click="removeScreen"></div>
       </div>
     </nav>
 
@@ -197,13 +206,13 @@
           </div>
           <div class="left_side col-6">
             <div class="d-flex justify-content-center align-items-center">
-              <a href>MENS PRODUCT</a>
+              <a href>ALL PRODUCT</a>
             </div>
           </div>
           <div class="right_side col-6">
             <div class="d-flex justify-content-center align-items-center">
               <div>
-                <a href>WOMENS PRODUCT</a>
+                <a href>HOT PRODUCT</a>
               </div>
             </div>
           </div>
@@ -218,37 +227,47 @@
 
 <script>
 import $ from "jquery";
-
 export default {
   data() {
     return {
       isLoading: false,
-      cartProduct:[],
-      cartLength:"",
-      cartTotal:"",
-    }
+      cartProduct: [],
+      cartLength: "",
+      cartTotal: ""
+    };
   },
   methods: {
-    getProduct(){
-           const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
-           const vm = this;
-           this.$http.get(api).then( response => {
-             vm.cartProduct = response.data.data.carts;
-             vm.cartTotal = response.data.data.total;
-                console.log(response.data.data);
-             vm.cartLength = (response.data.data.carts).length;
-             console.log(vm.cartLength);
-           })
+    getCartScreen() {
+      $(".cart-modal").addClass("cart-modal-open");
+      $("body").addClass("scrollyClose");
+      this.getProduct();
     },
 
-    removeCart(id){
-            const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart/${id}`;
-            const vm = this;
-            vm.isLoading = true;
-            this.$http.delete(api).then( () => {
-            vm.isLoading = false;
-            vm.getProduct();
-            })
+    removeScreen() {
+      $(".cart-modal").removeClass("cart-modal-open");
+           $("body").removeClass("scrollyClose");
+    },
+    getProduct() {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+      const vm = this;
+      this.$http.get(api).then(response => {
+        vm.cartProduct = response.data.data.carts;
+        vm.cartTotal = response.data.data.total;
+        console.log(response.data.data);
+        vm.cartLength = response.data.data.carts.length;
+        console.log(vm.cartLength);
+      });
+    },
+
+    removeCart(id) {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart/${id}`;
+      const vm = this;
+      vm.isLoading = true;
+      this.$http.delete(api).then(() => {
+        vm.isLoading = false;
+        vm.getProduct();
+        $(".dropdown-menu").dropdown("show");
+      });
     },
 
     managerurl() {
@@ -263,12 +282,27 @@ export default {
   },
   created() {
     this.getProduct();
-  },
+  }
 };
 </script>
 
 
 <style lang="scss">
+
+.scrollyClose{
+  overflow-y:hidden;
+}
+
+.cart-modal-open {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 100 !important;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .navbar {
   background-color: rgb(10, 8, 10);
   border-bottom: 1px solid#ececec;
@@ -384,5 +418,10 @@ export default {
 }
 .side_icon.animated > span:nth-child(3) {
   transform: rotate(-220deg);
+}
+
+//購物車內容
+.cartProduct_txt {
+  font-family: "Open Sans", sans-serif;
 }
 </style>

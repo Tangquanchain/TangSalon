@@ -7,13 +7,13 @@
       <div class="aside_menu d-flex justify-content-center align-items-center text-center">
         <ul class="list-unstyled">
           <li>
-            <a href="#">MENS</a>
-          </li>
-          <li>
-            <a href="#">WOMENS</a>
+            <a href="#">HOME</a>
           </li>
           <li>
             <a href="#">ALL PRODUCTS</a>
+          </li>
+          <li>
+            <a href="#">HOT PRODUCTS</a>
           </li>
           <li>
             <a @click="managerurl">
