@@ -1,152 +1,169 @@
 <template>
   <div>
     <loading :active.sync="isLoading"></loading>
-    <div class="container">
-      <header>
-        <div class="content_brand">
-          <div class="row no-gutters">
-            <div class="col-md-4 mt-sm-12 imghw_size">
-              <div class="img_banner">
-                <a class href="#">
-                  <img
-                    class="imghw_size1"
-                    style="height:581px; width:350px; margin-top:7px;"
-                    src="https://images.unsplash.com/photo-1533245270348-821d4d5c7514?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
-                    alt
-                  />
-                </a>
+    <div class="wrap">
+      <Alert/>
+      <Aside />
+      <Navbar/>
+      <div class="container">
+        <header>
+          <div class="content_brand">
+            <div class="row no-gutters">
+              <div class="col-md-4 mt-sm-12 imghw_size">
+                <div class="img_banner">
+                  <a class href="#">
+                    <img
+                      class="imghw_size1"
+                      style="height:581px; width:350px; margin-top:7px;"
+                      src="https://images.unsplash.com/photo-1533245270348-821d4d5c7514?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                      alt
+                    />
+                  </a>
+                </div>
               </div>
-            </div>
-            <div class="col-md-8 col-sm-12 mt-sm-2">
-              <div class="row">
-                <div class="col-5 d-none d-sm-block">
-                  <div class="img_banner img_side">
-                    <a href="#">
-                      <img
-                        class="imghw_size2"
-                        style="height:238px; width:440px;"
-                        src="https://images.unsplash.com/photo-1551491165-d77a9f869e0c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60"
-                        alt
-                      />
-                    </a>
+              <div class="col-md-8 col-sm-12 mt-sm-2">
+                <div class="row">
+                  <div class="col-5 d-none d-sm-block">
+                    <div class="img_banner img_side">
+                      <a href="#">
+                        <img
+                          class="imghw_size2"
+                          style="height:238px; width:440px;"
+                          src="https://images.unsplash.com/photo-1551491165-d77a9f869e0c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60"
+                          alt
+                        />
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-sm-5 ml-auto">
+                    <div class="img_banner d-flex">
+                      <div
+                        class="text-center imghw_size2"
+                        style="background-color:#282828;height:238px; width:100%!important;"
+                      >
+                        <h4 class="text-white mt-5">HAIR STYLE</h4>
+                        <p
+                          class="text-white"
+                        >Our brand build in 55 years ago,Classic designer will help you decide your hair</p>
+                        <button class="btn" type="button">PRODUCT</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-sm-5 ml-auto">
-                  <div class="img_banner d-flex">
-                    <div
-                      class="text-center imghw_size2"
-                      style="background-color:#282828;height:238px; width:100%!important;"
-                    >
-                      <h4 class="text-white mt-5">HAIR STYLE</h4>
-                      <p
-                        class="text-white"
-                      >Our brand build in 55 years ago,Classic designer will help you decide your hair</p>
-                      <button class="btn" type="button">PRODUCT</button>
+                <div class="row">
+                  <div class="col-12 mt-2">
+                    <div class="img_banner">
+                      <a href>
+                        <img
+                          style="height:334px; width:100%"
+                          src="https://images.unsplash.com/photo-1534778356534-d3d45b6df1da?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                          alt
+                        />
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-12 mt-2">
-                  <div class="img_banner">
-                    <a href>
-                      <img
-                        style="height:334px; width:100%"
-                        src="https://images.unsplash.com/photo-1534778356534-d3d45b6df1da?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                        alt
-                      />
-                    </a>
+            </div>
+          </div>
+        </header>
+
+        <div class="homemenu">
+          <div class="row justify-content-center align-items-center f-wrap">
+            <div class="col-lg-3 col-md-6 mb-2">
+              <div
+                class="d-flex justify-content-center align-items-center"
+                style="height:326px; width:100% ml-5"
+              >
+                <h2 class="h4">MANS STYLE</h2>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6" v-for="items in Menproducts" :key="items.id">
+              <div class="newproduct">
+                <div class="newproduct_pic position-relative">
+                  <div
+                    class="newProimg"
+                    :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
+                  ></div>
+                  <div class="product_guide text-dark text-center p-3">
+                    <h3 class="mb-2">SELECT STYLE</h3>
+                    <button
+                      class="btn btn-size"
+                      type="buttom"
+                      @click="addtoCart(items.id)"
+                    >ADD TO CART</button>
+                  </div>
+                  <div class="newstamp p-2">
+                    <span>HOT</span>
                   </div>
                 </div>
+
+                <div class="txt text-center mt-2">
+                  <p>{{items.title}}</p>
+                  <p>{{items.price | currency}} TW</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </header>
 
-      <div class="homemenu">
-        <div class="row justify-content-center align-items-center f-wrap">
-          <div class="col-lg-3 col-md-6 mb-2">
-            <div
-              class="d-flex justify-content-center align-items-center"
-              style="height:326px; width:100% ml-5"
-            >
-              <h2 class="h4">MANS STYLE</h2>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6" v-for="items in Menproducts" :key="items.id">
-            <div class="newproduct">
-              <div class="newproduct_pic position-relative">
-                <div
-                  class="newProimg"
-                  :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
-                ></div>
-                <div class="product_guide text-dark text-center p-3">
-                  <h3 class="mb-2">SELECT STYLE</h3>
-                  <button
-                    class="btn btn-size"
-                    type="buttom"
-                    @click="addtoCart(items.id)"
-                  >ADD TO CART</button>
-                </div>
-                <div class="newstamp p-2">
-                  <span>HOT</span>
-                </div>
-              </div>
-
-              <div class="txt text-center mt-2">
-                <p>{{items.title}}</p>
-                <p>{{items.price | currency}} TW</p>
+        <div class="homemenu">
+          <div class="row justify-content-center align-items-center f-wrap">
+            <div class="col-lg-3 col-md-6 mb-2 order-md-1">
+              <div
+                class="d-flex justify-content-center align-items-center"
+                style="height:326px; width:100% ml-5"
+              >
+                <h2 class="h4">HAIR TOOLS</h2>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="homemenu">
-        <div class="row justify-content-center align-items-center f-wrap">
-          <div class="col-lg-3 col-md-6 mb-2 order-md-1">
-            <div
-              class="d-flex justify-content-center align-items-center"
-              style="height:326px; width:100% ml-5"
-            >
-              <h2 class="h4">HAIR TOOLS</h2>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6" v-for="items in Toolproducts" :key="items.id">
-            <div class="newproduct">
-              <div class="newproduct_pic position-relative">
-                <div
-                  class="newProimg"
-                  :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
-                ></div>
-                <div class="product_guide text-dark text-center p-3">
-                  <h3 class="mb-2">SELECT STYLE</h3>
-                  <button
-                    class="btn btn-size"
-                    type="buttom"
-                    @click="addtoCart(items.id)"
-                  >ADD TO CART</button>
+            <div class="col-lg-3 col-md-6" v-for="items in Toolproducts" :key="items.id">
+              <div class="newproduct">
+                <div class="newproduct_pic position-relative">
+                  <div
+                    class="newProimg"
+                    :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
+                  ></div>
+                  <div class="product_guide text-dark text-center p-3">
+                    <h3 class="mb-2">SELECT STYLE</h3>
+                    <button
+                      class="btn btn-size"
+                      type="buttom"
+                      @click="addtoCart(items.id)"
+                    >ADD TO CART</button>
+                  </div>
+                  <div class="newstamp p-2">
+                    <span>HOT</span>
+                  </div>
                 </div>
-                <div class="newstamp p-2">
-                  <span>HOT</span>
-                </div>
-              </div>
 
-              <div class="txt text-cente mt-2">
-                <p>{{items.title}}</p>
-                <p>{{items.price | currency}} TW</p>
+                <div class="txt text-center mt-2">
+                  <p>{{items.title}}</p>
+                  <p>{{items.price | currency}} TW</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
+import Navbar from "./Navbar";
+import Aside from "./Aside";
+import Footer from "./Footer";
+import Alert from "./AlertMessage";
+import $ from 'jquery';
 export default {
+  components: {
+    Alert,
+    Navbar,
+    Aside,
+    Footer
+  },
   data() {
     return {
       isLoading: false,
@@ -181,6 +198,15 @@ export default {
       });
     },
 
+    getCartProduct() {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+      const vm = this;
+      this.$http.get(api).then(response => {
+        console.log(response.data.data.carts.length);
+        vm.$bus.$emit("cartnum:push", response.data.data.carts.length);
+      });
+    },
+
     addtoCart(id, qty = 1) {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       const vm = this;
@@ -193,11 +219,12 @@ export default {
       this.$http.post(api, { data: cart }).then(response => {
         vm.isLoading = false;
         vm.status.loadingItem = "";
-        console.log("購物車編號數量",response.data.data); //不像get(api)回傳一[]就可以計算length
+        console.log("購物車編號數量", response.data.data); //不像get(api)回傳一[]就可以計算length
         vm.getManProducts();
-         if(response.data.success){
-           vm.$bus.$emit("message:push",response.data.data);
-         }
+        if (response.data.success) {
+          vm.$bus.$emit("message:push", response.data.data, "info");
+          vm.getCartProduct();
+        }
       });
     }
   },
@@ -210,6 +237,29 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Rakkas&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Anton&display=swap");
+
+.wrap {
+  transition: transform 0.3s;
+  position: relative;
+}
+
+.wrap.active {
+  transform: translateX(220px);
+
+}
+
+.zxc{
+  position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 100 !important;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
 .img-container {
   width: 100%;
   height: 100%;

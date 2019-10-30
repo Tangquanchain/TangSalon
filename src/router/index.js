@@ -15,12 +15,20 @@ import Productslist from '@/components/manager/pages/Prolist';
 import CustomCheckout from '@/components/manager/pages/CustomCheckout';
 //customer
 import CustomerDashboard from '@/components/customer/CustomerDashboard';
+import Homeheader from '@/components/customer/Homeheader';
+import AllProduct from '@/components/customer/pages/AllProduct';
+import ShoppingCart from '@/components/customer/pages/ShoppingCart';
 
 Vue.use(VueRouter); //會在 Vue 中增加<router-view/> 與 <router-link/> 這兩個組件
 //啟用它
 
 export default new VueRouter({
     routes:[
+    {
+        path: '/home',
+        name: 'home',
+        component: Homeheader
+    },
     {
         path:'*',    //*代表任意值
         redirect:'/login' //使用 redirect 是將用戶導回正確的路徑 ，避免用戶進入不存在的頁面
@@ -39,6 +47,16 @@ export default new VueRouter({
         path:'/customer_dashboard',
         component:CustomerDashboard,
         children:[
+            {
+                name:'AllProduct',
+                path:'allproduct',
+                component:AllProduct
+            },
+            {
+                name:'ShoppingCart',
+                path:'shopping_cart',
+                component:ShoppingCart
+            },
         ]
     },
 

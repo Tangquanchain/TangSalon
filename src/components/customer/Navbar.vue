@@ -1,6 +1,8 @@
 <template>
   <div>
+    <div class="Screen-modal" @click="scrollClose"></div>
     <loading :active.sync="isLoading"></loading>
+      
     <nav class="navbar navbar-expand-md navbar-light">
       <a href="#" class="side_icon d-md-none d-sm-block" @click.prevent="siderOpen">
         <span></span>
@@ -35,7 +37,9 @@
           <span
             class="badge badge-pill badge-danger"
             style="position:absolute; left:25px; top:7px; font-size:10px;"
-          >{{cartLength}}</span>
+          >
+            <AlertCart />
+          </span>
         </a>
         <div
           class="dropdown-menu dropdown-menu-right p-3"
@@ -88,13 +92,19 @@
       <div class="collapse navbar-collapse d-none d-md-block" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">Home</a>
+            <router-link style="text-decoration:none" to="/home">
+              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">Home</a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">Products</a>
+            <router-link style="text-decoration:none" to="/customer_dashboard/allproduct">
+              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">ALL PRODUCTS</a>
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">Others</a>
+            <router-link style="text-decoration:none" to="/customer_dashboard/shopping_cart">
+              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">HOT PRODUCTS</a>
+            </router-link>
           </li>
           <li class="nav-item">
             <a
@@ -129,7 +139,9 @@
                 <span
                   class="badge badge-pill badge-danger"
                   style="position:absolute; left:25px; top:7px; font-size:10px;"
-                >{{cartLength}}</span>
+                >
+                  <AlertCart />
+                </span>
               </a>
               <div
                 class="dropdown-menu dropdown-menu-right p-3"
@@ -227,7 +239,11 @@
 
 <script>
 import $ from "jquery";
+import AlertCart from "./AlertCartMessage";
 export default {
+  components: {
+    AlertCart
+  },
   data() {
     return {
       isLoading: false,
@@ -239,13 +255,13 @@ export default {
   methods: {
     getCartScreen() {
       $(".cart-modal").addClass("cart-modal-open");
-      $("body").addClass("scrollyClose");
+      $("body").addClass("scrollClose");
       this.getProduct();
     },
 
     removeScreen() {
       $(".cart-modal").removeClass("cart-modal-open");
-           $("body").removeClass("scrollyClose");
+      $("body").removeClass("scrollClose");
     },
     getProduct() {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
@@ -254,8 +270,7 @@ export default {
         vm.cartProduct = response.data.data.carts;
         vm.cartTotal = response.data.data.total;
         console.log(response.data.data);
-        vm.cartLength = response.data.data.carts.length;
-        console.log(vm.cartLength);
+        vm.$bus.$emit("cartnum:push", response.data.data.carts.length);
       });
     },
 
@@ -278,6 +293,13 @@ export default {
       $(".side_icon").toggleClass("animated");
       $(".wrap").toggleClass("active");
       $(".aside").toggleClass("active");
+      $(".Screen-modal").toggleClass("cart-modal-open");
+    },
+    scrollClose() {
+      $(".Screen-modal").toggleClass("cart-modal-open");
+      $(".wrap").removeClass("active");
+      $(".aside").removeClass("active");
+      $(".side_icon").removeClass("animated");
     }
   },
   created() {
@@ -288,9 +310,8 @@ export default {
 
 
 <style lang="scss">
-
-.scrollyClose{
-  overflow-y:hidden;
+.scrollClose {
+  overflow-y: hidden;
 }
 
 .cart-modal-open {

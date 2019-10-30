@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="wrap">
-      <AlertCart/>
+    <div class="wrap" @click="scrollClose">
+      <Alert/>
       <Aside/>
       <Navbar/>
-      <Homeheader/>
+      <router-view></router-view>
       <Footer/>
     </div>
   </div>
@@ -15,17 +15,21 @@
 <script>
 import Navbar from "./Navbar";
 import Aside from './Aside';
-import Homeheader from './Homeheader';
 import Footer from './Footer';
-import AlertCart from './AlertCartMessage'
+import Alert from './AlertMessage'
 export default {
   components: {
-    AlertCart,
+    Alert,
     Navbar,
     Aside,
-    Homeheader,
     Footer
-  }
+  },
+  methods: {
+    scrollClose(){
+           $(".wrap").removeClass("active");
+      $(".aside").removeClass("active");
+    }
+  },
 };
 </script>
 
@@ -40,6 +44,7 @@ export default {
 
 .wrap.active {
   transform: translateX(220px);
+
 }
 
 

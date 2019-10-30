@@ -1,6 +1,6 @@
 <template>
   <div>
-     <!-- 測試 {{ CartNumber  }} -->
+     {{ CartNumber }}
   </div>
 </template>
 
@@ -19,10 +19,10 @@ export default {
   },
   created() {
     const vm = this;
-    vm.$bus.$on("message:push", cartNum => {
+    vm.$bus.$on("cartnum:push", cartNum => {
       vm.getCartNum(cartNum);
     });
-    vm.getCartNum();
+    vm.getCartNum();//測試用
   }
 };
 </script>

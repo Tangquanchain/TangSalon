@@ -41,6 +41,10 @@ export default {
 </script>
 
 <style lang="scss">
+body{
+  overflow-x: hidden;
+}
+
 .aside {
   position: absolute;
   background-color: rgba(241, 238, 238, 0.6);
