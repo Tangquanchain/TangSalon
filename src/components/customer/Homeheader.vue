@@ -2,9 +2,8 @@
   <div>
     <loading :active.sync="isLoading"></loading>
     <div class="wrap">
-      <Alert/>
       <Aside />
-      <Navbar/>
+      <Navbar />
       <div class="container">
         <header>
           <div class="content_brand">
@@ -45,7 +44,7 @@
                         <p
                           class="text-white"
                         >Our brand build in 55 years ago,Classic designer will help you decide your hair</p>
-                        <button class="btn" type="button">PRODUCT</button>
+                        <button @click="goProducts" class="btn" type="button">PRODUCT</button>
                       </div>
                     </div>
                   </div>
@@ -86,12 +85,14 @@
                     :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
                   ></div>
                   <div class="product_guide text-dark text-center p-3">
-                    <h3 class="mb-2">SELECT STYLE</h3>
+                    <h3 class="mb-2">SELECT</h3>
                     <button
-                      class="btn btn-size"
+                      class="btn btn-size pr-5 pl-5"
                       type="buttom"
-                      @click="addtoCart(items.id)"
-                    >ADD TO CART</button>
+                      @click="adddetail(items.id)"
+                    >
+                      <h5 class="mb-0">DETAIL</h5>
+                    </button>
                   </div>
                   <div class="newstamp p-2">
                     <span>HOT</span>
@@ -99,8 +100,8 @@
                 </div>
 
                 <div class="txt text-center mt-2">
-                  <p>{{items.title}}</p>
-                  <p>{{items.price | currency}} TW</p>
+                  <p class="font-weight-bold">{{items.title}}</p>
+                  <p class="font-weight-bold">{{items.price | currency}} TW</p>
                 </div>
               </div>
             </div>
@@ -125,12 +126,14 @@
                     :style="`background: url(${items.imageUrl}) center / cover no-repeat;`"
                   ></div>
                   <div class="product_guide text-dark text-center p-3">
-                    <h3 class="mb-2">SELECT STYLE</h3>
+                    <h3 class="mb-2">SELECT</h3>
                     <button
-                      class="btn btn-size"
+                      class="btn btn-size pr-5 pl-5"
                       type="buttom"
-                      @click="addtoCart(items.id)"
-                    >ADD TO CART</button>
+                      @click="adddetail(items.id)"
+                    >
+                      <h5>DETAIL</h5>
+                    </button>
                   </div>
                   <div class="newstamp p-2">
                     <span>HOT</span>
@@ -138,8 +141,8 @@
                 </div>
 
                 <div class="txt text-center mt-2">
-                  <p>{{items.title}}</p>
-                  <p>{{items.price | currency}} TW</p>
+                  <p class="font-weight-bold">{{items.title}}</p>
+                  <p class="font-weight-bold">{{items.price | currency}} TW</p>
                 </div>
               </div>
             </div>
@@ -155,11 +158,9 @@
 import Navbar from "./Navbar";
 import Aside from "./Aside";
 import Footer from "./Footer";
-import Alert from "./AlertMessage";
-import $ from 'jquery';
+import $ from "jquery";
 export default {
   components: {
-    Alert,
     Navbar,
     Aside,
     Footer
@@ -169,10 +170,7 @@ export default {
       isLoading: false,
       Menproducts: [],
       Toolproducts: [],
-      newProductsimg: {},
-      status: {
-        loadingItem: "" //存放產品id的值
-      }
+      newProductsimg: {}
     };
   },
   methods: {
@@ -187,6 +185,11 @@ export default {
         });
       });
     },
+
+    goProducts() {
+      this.$router.push("/store/allproduct");
+    },
+
     getToolProducts() {
       const vm = this;
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products/all`;
@@ -207,23 +210,13 @@ export default {
       });
     },
 
-    addtoCart(id, qty = 1) {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+    adddetail(id) {
       const vm = this;
-      vm.isLoading = true;
-      vm.status.loadingItem = id;
-      const cart = {
-        product_id: id,
-        qty
-      };
-      this.$http.post(api, { data: cart }).then(response => {
-        vm.isLoading = false;
-        vm.status.loadingItem = "";
-        console.log("購物車編號數量", response.data.data); //不像get(api)回傳一[]就可以計算length
-        vm.getManProducts();
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/product/${id}`;
+      this.$http.get(api).then(response => {
+        console.log(response.data.product.id);
         if (response.data.success) {
-          vm.$bus.$emit("message:push", response.data.data, "info");
-          vm.getCartProduct();
+          vm.$router.push(`/store/shopping_cart/${response.data.product.id}`);
         }
       });
     }
@@ -240,24 +233,16 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Anton&display=swap");
 
+$black: #000;
+$white: #fff;
+
 .wrap {
   transition: transform 0.3s;
   position: relative;
 }
 
 .wrap.active {
-  transform: translateX(220px);
-
-}
-
-.zxc{
-  position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 100 !important;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+  transform: translateX(450px);
 }
 
 .img-container {
@@ -276,14 +261,14 @@ export default {
   button {
     width: 100px;
     height: 50px;
-    background-color: #fff;
-    color: #000;
+    background-color: $white;
+    color: $black;
     border-radius: 0;
     font-family: "Rakkas", cursive;
     transition: all 0.3s;
     &:hover {
-      background-color: #000;
-      color: #fff;
+      background-color: $black;
+      color: $white;
     }
   }
 }
@@ -295,7 +280,7 @@ export default {
   text-align: center;
   &::before {
     content: "";
-    border: 2px solid white;
+    border: 2px solid $white;
     top: 20px;
     right: 30px;
     bottom: 20px;
@@ -309,7 +294,7 @@ export default {
 .content_brand .img_side a {
   &::before {
     content: "";
-    border: 2px solid white;
+    border: 2px solid $white;
     top: 20px;
     right: -110px;
     bottom: 20px;
@@ -413,14 +398,18 @@ export default {
   opacity: 0;
   transition: all 0.35s;
   h3 {
-    font-size: 16px;
+    font-size: 24px;
+    font-family: "Anton", sans-serif;
+  }
+  h5 {
+    font-family: "Open Sans", sans-serif;
   }
   .btn-size {
-    border: 1px solid #000;
+    border: 1px solid $black;
     margin: 2px 5px;
     border-radius: 0;
     &:hover {
-      background-color: #000;
+      background-color: $black;
       color: rgba(251, 251, 251, 0.8);
     }
   }
@@ -434,7 +423,7 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  background-color: #000;
+  background-color: $black;
   span {
     color: white;
     font-family: "Open Sans", sans-serif;
@@ -445,7 +434,7 @@ export default {
   width: 100%;
   background-color: rgba(251, 251, 251, 0.1);
   color: rgba(251, 251, 251, 0.8);
-  box-shadow: 20px 20px 30px #000;
+  box-shadow: 20px 20px 30px $black;
   position: absolute;
   bottom: 0;
   top: 0;

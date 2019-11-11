@@ -2,91 +2,33 @@
   <div>
     <div class="Screen-modal" @click="scrollClose"></div>
     <loading :active.sync="isLoading"></loading>
-      
+
     <nav class="navbar navbar-expand-md navbar-light">
       <a href="#" class="side_icon d-md-none d-sm-block" @click.prevent="siderOpen">
         <span></span>
         <span></span>
         <span></span>
       </a>
-
-      <a class href="#">
-        <img class="d-none d-md-inline-block" src="../../../static/images/TagLogo.png" />
-        <img
-          class="d-inline-block d-md-none"
-          src="../../../static/images/TagLogo.png"
-          style="width: 60px"
-          height="40px"
-        />
-      </a>
-
-      <!-- 手機購物車 -->
-      <div class="dropdown d-md-none" style="positon:relative">
-        <a
-          @click="getCartScreen"
-          class="nav-link text-dark order-md-1"
-          href="#"
-          data-toggle="dropdown"
-          data-flip="false"
-        >
-          <i
-            class="fa fa-shopping-bag align-baseline text-white"
-            aria-hidden="true"
-            style="font-size:26px"
-          ></i>
-          <span
-            class="badge badge-pill badge-danger"
-            style="position:absolute; left:25px; top:7px; font-size:10px;"
-          >
-            <AlertCart />
-          </span>
+      <router-link to="/home">
+        <a class href="#">
+          <img class="d-none d-md-inline-block" src="../../../static/images/TagLogo.png" />
+          <img
+            class="d-inline-block d-md-none"
+            src="../../../static/images/TagLogo.png"
+            style="width: 60px"
+            height="40px"
+          />
         </a>
-        <div
-          class="dropdown-menu dropdown-menu-right p-3"
-          style="min-width: 450px; height:175px; overflow-y:scroll"
-          data-offset="400"
-        >
-          <h6 class="font-weight-bold">CART LIST</h6>
-          <table class="table table-sm">
-            <tbody v-if="cartProduct">
-              <tr v-for="items in cartProduct" :key="items.id">
-                <td class="align-middle text-center">
-                  <div
-                    :style="`width:100px; height:100px; background: url(${items.product.imageUrl}) center / cover no-repeat;`"
-                  ></div>
-                </td>
-                <td class="align-middle">
-                  <p class="cartProduct_txt mb-0">{{items.product.title}}</p>
-                </td>
-                <td class="align-middle">X{{items.qty}}</td>
-                <td class="align-middle text-right">{{items.product.origin_price | currency }} TW</td>
-                <td class="align-middle">
-                  <button class="btn" type="button" @click="removeCart(items.id)">
-                    <i class="fa fa-trash-alt" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td class="text-left" colspan="2">
-                  <p class="cartProduct_txt mb-0">TOTAL</p>
-                </td>
-                <td class="text-right" colspan="3">
-                  <p class="cartProduct_txt mb-0">{{ cartTotal | currency }} TW</p>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-          <a
-            href="shoppingCart-checkout.html"
-            class="btn btn-primary btn-block"
-            style="border-radius:20px"
-          >
-            <p class="cartProduct_txt mb-0">CHECKOUT</p>
-          </a>
-        </div>
-        <div class="cart-modal" @click="removeScreen"></div>
+      </router-link>
+      <!-- 手機管理 -->
+      <div class="d-md-none">
+        <a @click.prevent="managerurl" class="nav-link text-dark order-md-1" href="#">
+          <i
+            aria-hidden="true"
+            class="fas fa-user-cog align-baseline text-white"
+            style="font-size: 26px;"
+          ></i>
+        </a>
       </div>
 
       <div class="collapse navbar-collapse d-none d-md-block" id="navbarNav">
@@ -97,13 +39,8 @@
             </router-link>
           </li>
           <li class="nav-item">
-            <router-link style="text-decoration:none" to="/customer_dashboard/allproduct">
-              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">ALL PRODUCTS</a>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link style="text-decoration:none" to="/customer_dashboard/shopping_cart">
-              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">HOT PRODUCTS</a>
+            <router-link style="text-decoration:none" to="/store/allproduct">
+              <a class="nav-item nav-link text-white mr-5 font-weight-bold" href="#">PRODUCTS</a>
             </router-link>
           </li>
           <li class="nav-item">
@@ -123,14 +60,8 @@
         <ul class="navbar-nav cartbrowser ml-auto">
           <li class="nav-item d-flex">
             <!-- 網頁購物車 -->
-            <div class="dropdown" style="positon:relative">
-              <a
-                @click="getCartScreen"
-                class="nav-link text-dark order-md-1 mr-5"
-                href="#"
-                data-toggle="dropdown"
-                data-flip="false"
-              >
+            <div style="positon:relative">
+              <a @click.prevent="getCartScreen" class="nav-link text-dark order-md-1 mr-5" href="#">
                 <i
                   class="fa fa-shopping-bag align-baseline text-white"
                   aria-hidden="true"
@@ -143,53 +74,6 @@
                   <AlertCart />
                 </span>
               </a>
-              <div
-                class="dropdown-menu dropdown-menu-right p-3"
-                style="min-width: 450px; height:265px; overflow-y:scroll"
-                data-offset="400"
-              >
-                <h6 class="font-weight-bold">CART LIST</h6>
-                <table class="table table-sm">
-                  <tbody v-if="cartProduct">
-                    <tr v-for="items in cartProduct" :key="items.id">
-                      <td class="align-middle text-center">
-                        <div
-                          :style="`width:100px; height:100px; background: url(${items.product.imageUrl}) center / cover no-repeat;`"
-                        ></div>
-                      </td>
-                      <td class="align-middle">
-                        <p class="cartProduct_txt mb-0">{{items.product.title}}</p>
-                      </td>
-                      <td class="align-middle">X{{items.qty}}</td>
-                      <td
-                        class="align-middle text-right"
-                      >{{items.product.origin_price | currency }} TW</td>
-                      <td class="align-middle">
-                        <button class="btn" type="button" @click="removeCart(items.id)">
-                          <i class="fa fa-trash-alt" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td class="text-left" colspan="2">
-                        <p class="cartProduct_txt mb-0">TOTAL</p>
-                      </td>
-                      <td class="text-right" colspan="3">
-                        <p class="cartProduct_txt mb-0">{{ cartTotal | currency }} TW</p>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <a
-                  href="shoppingCart-checkout.html"
-                  class="btn btn-primary btn-block"
-                  style="border-radius:20px"
-                >
-                  <p class="cartProduct_txt mb-0">CHECKOUT</p>
-                </a>
-              </div>
             </div>
             <a
               class="nav-link text-dark order-md-2"
@@ -212,20 +96,22 @@
       <div class="container">
         <div class="row">
           <div class="top_side col-12">
-            <div class="d-flex justify-content-center align-items-center py-2">
-              <P>FERR SHIPPING WHEN YOU BUY MORE THEN $899 TW</P>
+            <div class="d-flex justify-content-center align-items-center py-4">
+              <P>FERR DISCOUNT CODE FOR <strong class="text-success">Tom1111</strong> </P>
             </div>
           </div>
           <div class="left_side col-6">
             <div class="d-flex justify-content-center align-items-center">
-              <a href>ALL PRODUCT</a>
+              <router-link to="/home">
+                <a href="#">HOME</a>
+              </router-link>
             </div>
           </div>
           <div class="right_side col-6">
             <div class="d-flex justify-content-center align-items-center">
-              <div>
-                <a href>HOT PRODUCT</a>
-              </div>
+              <router-link to="/store/allproduct">
+                <a href="#">PRODUCTS</a>
+              </router-link>
             </div>
           </div>
         </div>
@@ -238,8 +124,8 @@
 
 
 <script>
-import $ from "jquery";
 import AlertCart from "./AlertCartMessage";
+import $ from "jquery";
 export default {
   components: {
     AlertCart
@@ -253,16 +139,6 @@ export default {
     };
   },
   methods: {
-    getCartScreen() {
-      $(".cart-modal").addClass("cart-modal-open");
-      $("body").addClass("scrollClose");
-      this.getProduct();
-    },
-
-    removeScreen() {
-      $(".cart-modal").removeClass("cart-modal-open");
-      $("body").removeClass("scrollClose");
-    },
     getProduct() {
       const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       const vm = this;
@@ -271,18 +147,28 @@ export default {
         vm.cartTotal = response.data.data.total;
         console.log(response.data.data);
         vm.$bus.$emit("cartnum:push", response.data.data.carts.length);
+        vm.$bus.$emit("cartfinish:push", response.data.data.carts);
       });
     },
 
-    removeCart(id) {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart/${id}`;
+    getCartScreen() {
       const vm = this;
-      vm.isLoading = true;
-      this.$http.delete(api).then(() => {
-        vm.isLoading = false;
-        vm.getProduct();
-        $(".dropdown-menu").dropdown("show");
-      });
+      $(".cart-modal").addClass("cart-modal-open");
+      $("body").addClass("scrollClose");
+      $(".side_icon").toggleClass("animated");
+      $(".wrap").toggleClass("active");
+      $(".aside").toggleClass("active");
+      $(".Screen-modal").toggleClass("cart-modal-open");
+      vm.getProduct();
+    },
+
+    removeScreen() {
+      $(".cart-modal").removeClass("cart-modal-open");
+      $("body").removeClass("scrollClose");
+      $(".side_icon").toggleClass("animated");
+      $(".wrap").toggleClass("active");
+      $(".aside").toggleClass("active");
+      $(".Screen-modal").toggleClass("cart-modal-open");
     },
 
     managerurl() {
@@ -310,6 +196,9 @@ export default {
 
 
 <style lang="scss">
+$side-header:#ececec;
+
+
 .scrollClose {
   overflow-y: hidden;
 }
@@ -326,56 +215,38 @@ export default {
 
 .navbar {
   background-color: rgb(10, 8, 10);
-  border-bottom: 1px solid#ececec;
-  position: fixed;
+  border-bottom: 1px solid $side-header;
+  // position: fixed;
   width: 100%;
   z-index: 999;
 }
 
-.navbar-nav li a,
-.cartphone {
+.navbar-nav li a {
   font-family: "Open Sans", sans-serif;
   font-size: 20px;
   transform: translateY(0px);
   transition: 0.35s;
 }
 
-.navbar-nav li a:hover,
-.cartphone:hover {
+.navbar-nav li a:hover {
   transform: translateY(-5px);
-}
-
-@media (max-width: 767px) {
-  .cartbrowser {
-    display: none;
-  }
-  .site_header .top_side {
-    display: none;
-  }
-}
-
-@media (min-width: 768px) {
-  .site_header .right_side,
-  .site_header .left_side {
-    display: none;
-  }
 }
 
 .site_header {
   background-color: rgba(236, 236, 236, 0.6);
-  border-left: 1px solid #ececec;
-  border-right: 1px solid #ececec;
-  border-bottom: 1px solid#ececec;
-  padding-top: 76px;
+  border-left: 1px solid $side-header;
+  border-right: 1px solid $side-header;
+  border-bottom: 1px solid$side-header;
+  // padding-top: 76px;
   p {
     font-family: "Open Sans", sans-serif;
-    font-size: 12px;
+    font-size: 20px;
     color: rgba(10, 8, 10, 0.9);
     margin-bottom: 0;
     margin-top: 6px;
   }
   .right_side {
-    border-left: 1.5px solid #ececec;
+    border-left: 1.5px solid $side-header;
     padding: 0;
   }
 }
@@ -391,7 +262,23 @@ export default {
   transition: color 0.3s;
   cursor: pointer;
   &:hover {
-    color: rgb(0, 0, 0);
+    color: black;
+  }
+}
+
+@media (max-width: 767px) {
+  .cartbrowser {
+    display: none;
+  }
+  .site_header .top_side {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .site_header .right_side,
+  .site_header .left_side {
+    display: none;
   }
 }
 
@@ -439,10 +326,5 @@ export default {
 }
 .side_icon.animated > span:nth-child(3) {
   transform: rotate(-220deg);
-}
-
-//購物車內容
-.cartProduct_txt {
-  font-family: "Open Sans", sans-serif;
 }
 </style>

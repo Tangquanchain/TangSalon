@@ -18,7 +18,11 @@ import CustomerDashboard from '@/components/customer/CustomerDashboard';
 import Homeheader from '@/components/customer/Homeheader';
 import AllProduct from '@/components/customer/pages/AllProduct';
 import ShoppingCart from '@/components/customer/pages/ShoppingCart';
-
+//checkout
+import Checkout from '@/components/customer/Checkout';
+import Cart from "@/components/customer/pages/Cart";
+import Complete from "@/components/customer/pages/Complete";
+import Formdata from "@/components/customer/pages/Formdata";
 Vue.use(VueRouter); //會在 Vue 中增加<router-view/> 與 <router-link/> 這兩個組件
 //啟用它
 
@@ -44,22 +48,45 @@ export default new VueRouter({
 
     {
         name:'customer_dashboard',
-        path:'/customer_dashboard',
+        path:'/store',
         component:CustomerDashboard,
         children:[
             {
                 name:'AllProduct',
                 path:'allproduct',
-                component:AllProduct
+                component:AllProduct,
             },
             {
                 name:'ShoppingCart',
-                path:'shopping_cart',
-                component:ShoppingCart
+                path:'shopping_cart/:itemId',
+                component:ShoppingCart,
             },
         ]
     },
 
+    //checkout 路由
+    {
+        name:'checkout',
+        path:'/checkout',
+        component: Checkout,
+        children:[
+        {
+        name:'cart',
+        path:'cart',
+        component: Cart,
+        },
+        {
+            name:'formdata',
+            path:'formdata/:orderId',
+            component: Formdata,
+        },
+        {
+            name:'complete',
+            path:'complete',
+            component: Complete,
+        },
+    ]
+    },
 
 
 
@@ -99,7 +126,7 @@ export default new VueRouter({
         children:[
             {
             name:'CustomOrder',
-            path:'custom_order', 
+            path:'custom_order',
             component:Customorder,
             },
             {

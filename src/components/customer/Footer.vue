@@ -1,7 +1,7 @@
 <template>
   <div>
     <footer class="footer d-flex justify-content-center align-items-center py-5 bg-sm-dark">
-      <div class="container text-white mt-6">
+      <div class="container text-white mt-5">
         <div class="row">
           <div class="col-md-4 col-sm-6">
             <div class="d-flex flex-column align-items-center">
@@ -97,6 +97,8 @@ export default {};
 </script>
 
 <style lang="scss">
+
+
 .footer {
   background-image: url("../../../static/images/footer2.png");
   width: 100%;
@@ -109,7 +111,7 @@ export default {};
   .footer {
     background-image: none;
     height: 100%;
-    background-color: #000;
+    background-color: black;
   }
 }
 

@@ -71,7 +71,7 @@
               <del class="h6" v-if="product.price">原價{{product.origin_price}}元</del>
               <div class="h4" v-if="product.price">現在只要{{product.price}}元</div>
             </div>
-            <select name class="0-control mt-3" v-model="product.num" id>
+            <select class="0-control mt-3" v-model="product.num">
               <option :value="num" v-for="num in 10" :key="num">選購 {{ num }} {{ product.unit }}</option>
               <!-- {{ product.unit }} 編輯建立產品增加單位選項才會有 unit 屬性 -->
             </select>
