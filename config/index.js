@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/TangSalon/',/*將 publicPath 修改與 Github repo 的名稱*/ /*編譯後的路徑來做調整，上傳GitHub再來調整*/
+    assetsPublicPath: '/TangSalon/dist/',/*將 publicPath 修改與 Github repo 的名稱*/ /*編譯後的路徑來做調整，上傳GitHub再來調整*/
     proxyTable: {},
 
     // Various Dev Server settings
