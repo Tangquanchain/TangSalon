@@ -52,7 +52,7 @@
                 <div class="row">
                   <div class="col-12 mt-2">
                     <div class="img_banner">
-                      <a href>
+                      <a href="#">
                         <img
                           style="height:334px; width:100%"
                           src="https://images.unsplash.com/photo-1534778356534-d3d45b6df1da?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
